@@ -1,14 +1,8 @@
 import Head from "next/head";
-
-import { Inter, Island_Moments } from "next/font/google";
-import styles from "@/styles/Home.module.css";
-import axios from "axios";
-const inter = Inter({ subsets: ["latin"] });
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Container,
   Stack,
-  Input,
   Button,
   SimpleGrid,
   Flex,
@@ -23,30 +17,14 @@ import {
 } from "@chakra-ui/react";
 import PokemonCard from "@/components/PokemonCard";
 import PokemonData from "@/components/PokemonData";
+import { usePokemonContext } from "@/components/ContextProvider";
+import { Pagination } from "@/components/Pagination";
 
 export default function Home() {
   const pokemonDataModal = useDisclosure();
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [pokemon, setPokemon] = useState([]);
+  const {setIsModalOff, count, pokemon, params, setParams} = usePokemonContext();
   const [selectedPokemon, setSelectedPokemon] = useState();
-  const [currentPage, setCurrentPage] = useState(
-    "https://pokeapi.co/api/v2/pokemon/?limit=20&offset=0"
-  );
-
-  useEffect(() => {
-    setIsLoading(true);
-    axios.get(currentPage).then(async ({ data }) => {
-      const promises = data.results.map((result) => axios(result.url));
-      const fetchedPokemon = (await Promise.all(promises)).map(
-        (res) => res.data
-      );
-      setPokemon((prev) => [...prev, ...fetchedPokemon]);
-      setIsLoading(false);
-    });
-  }, [currentPage]);
-
-  function handleNextPage() {}
+  setIsModalOff(true);
 
   function handleViewPokemon(pokemon) {
     setSelectedPokemon(pokemon);
@@ -75,10 +53,7 @@ export default function Home() {
                 </Box>
               ))}
             </SimpleGrid>
-
-            <Button isLoading={false} onClick={handleNextPage}>
-              Cargas más
-            </Button>
+            <Pagination numOfPages={parseInt(count/params.chunk)}/>
           </Stack>
         </Container>
       </Flex>

@@ -1,3 +1,4 @@
+import { saveNewPokemon } from "@/pages/api/gateways";
 import {
   Box,
   AspectRatio,
@@ -18,14 +19,15 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { usePokemonContext } from "./ContextProvider";
 
 export default function PokemonData({ pokemon }) {
-  const [catched, setCatched] = useState(false);
-
+  const {setCatched, setIsModalOff} = usePokemonContext()
+  setIsModalOff(false);
   return (
     <Stack spacing="5" pb="5">
       <Stack spacing="5" position="relative">
-        <Box position="absolute" right="0" zIndex="99">
+        <Box position="absolute" right="0" zIndex="99" onChange={() => setCatched({id: pokemon.id, name: pokemon.name})}>
           <Checkbox>Catched</Checkbox>
         </Box>
         <AspectRatio w="full" ratio={1}>
