@@ -1,33 +1,35 @@
-import { saveNewPokemon } from "@/pages/api/gateways";
 import {
   Box,
   AspectRatio,
   Image,
   Stack,
-  SimpleGrid,
-  Heading,
-  Tabs,
-  TabList,
-  TabPanels,
-  TabPanel,
   Progress,
   Text,
-  Tab,
   Badge,
   HStack,
   Checkbox,
 } from "@chakra-ui/react";
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { usePokemonContext } from "./ContextProvider";
 
 export default function PokemonData({ pokemon }) {
-  const {setCatched, setIsModalOff} = usePokemonContext()
+  const { setCatched, setIsModalOff } = usePokemonContext();
   setIsModalOff(false);
+  const handleCatchedPokemon = () => {
+    setCatched({
+      id: pokemon.id,
+      name: pokemon.name,
+      source: pokemon.sprites.front_default,
+    });
+  };
   return (
     <Stack spacing="5" pb="5">
       <Stack spacing="5" position="relative">
-        <Box position="absolute" right="0" zIndex="99" onChange={() => setCatched({id: pokemon.id, name: pokemon.name})}>
+        <Box
+          position="absolute"
+          right="0"
+          zIndex="99"
+          onChange={handleCatchedPokemon}
+        >
           <Checkbox>Catched</Checkbox>
         </Box>
         <AspectRatio w="full" ratio={1}>
@@ -39,35 +41,38 @@ export default function PokemonData({ pokemon }) {
         <Stack direction="row" spacing="5">
           <Stack>
             <Text fontSize="sm">Weight</Text>
-            <Text>20</Text>
+            <Text>{pokemon.weight}</Text>
           </Stack>
           <Stack>
             <Text fontSize="sm">Height</Text>
-            <Text>12</Text>
+            <Text>{pokemon.height}</Text>
           </Stack>
           <Stack>
             <Text fontSize="sm">Movimientos</Text>
-            <Text>109</Text>
+            <Text>{pokemon.moves.length}</Text>
           </Stack>
           <Stack>
             <Text fontSize="sm">Tipos</Text>
             <HStack>
-              <Badge>Agua</Badge>
-              <Badge>Agua</Badge>
+              {pokemon.types.map((item) => (
+                <Badge key={pokemon.id}>{item.type.name}</Badge>
+              ))}
             </HStack>
           </Stack>
         </Stack>
       </Stack>
 
       <Stack spacing="5" p="5" bg="gray.100" borderRadius="xl">
-        <Stack>
-          <Text fontSize="xs">hp</Text>
-          <Progress bg="gray.300" borderRadius="full" value={80} />
-        </Stack>
-        <Stack>
-          <Text fontSize="xs">attack</Text>
-          <Progress bg="gray.300" borderRadius="full" value={65} />
-        </Stack>
+        {pokemon.stats.map((item) => (
+          <Stack key={item.stat.name}>
+            <Text fontSize="xs">{item.stat.name}</Text>
+            <Progress
+              bg="gray.300"
+              borderRadius="full"
+              value={item.base_stat}
+            />
+          </Stack>
+        ))}
       </Stack>
     </Stack>
   );

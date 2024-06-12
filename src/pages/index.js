@@ -14,15 +14,19 @@ import {
   ModalContent,
   ModalCloseButton,
   useDisclosure,
+  Text,
+  GridItem,
+  Grid,
 } from "@chakra-ui/react";
 import PokemonCard from "@/components/PokemonCard";
 import PokemonData from "@/components/PokemonData";
 import { usePokemonContext } from "@/components/ContextProvider";
 import { Pagination } from "@/components/Pagination";
+import Catched from "@/components/Catched";
 
 export default function Home() {
   const pokemonDataModal = useDisclosure();
-  const {setIsModalOff, count, pokemon, params, setParams} = usePokemonContext();
+  const { setIsModalOff, count, pokemon, params } = usePokemonContext();
   const [selectedPokemon, setSelectedPokemon] = useState();
   setIsModalOff(true);
 
@@ -42,18 +46,25 @@ export default function Home() {
       <Flex alignItems="center" minH="100vh" justifyContent="center">
         <Container maxW="container.lg">
           <Stack p="5" alignItems="center" spacing="5">
-            <SimpleGrid spacing="5" columns={{ base: 1, md: 5 }}>
-              {pokemon.map((pokemon) => (
+            <Text fontSize={{ base: "lg", md: "2xl" }}>
+              Bienvenido al mundo Pokémon!!
+            </Text>
+            <Catched />
+            <SimpleGrid
+              spacing="5"
+              columns={{ base: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
+            >
+              {pokemon.map((poke) => (
                 <Box
                   as="button"
-                  key={pokemon.id}
-                  onClick={() => handleViewPokemon(pokemon)}
+                  key={poke.id}
+                  onClick={() => handleViewPokemon(poke)}
                 >
-                  <PokemonCard pokemon={pokemon} />
+                  <PokemonCard pokemon={poke} />
                 </Box>
               ))}
             </SimpleGrid>
-            <Pagination numOfPages={parseInt(count/params.chunk)}/>
+            <Pagination numOfPages={Math.ceil(count / params.chunk)} />
           </Stack>
         </Container>
       </Flex>

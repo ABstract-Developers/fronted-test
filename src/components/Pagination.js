@@ -1,6 +1,6 @@
 'use-client'
-import { Button, HStack } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
+import { Button, Wrap, WrapItem } from '@chakra-ui/react'
+import React, { useState } from 'react'
 import { usePokemonContext } from './ContextProvider'
 
 export const Pagination = ({numOfPages}) => {
@@ -23,31 +23,28 @@ export const Pagination = ({numOfPages}) => {
         });
     }
     return (
-    <HStack spacing={2}>
-        <Button
-            onClick={handleMinus}
-            variant={'solid' }
-            colorScheme={'gray'}
-        >
-            MENOS
-        </Button>
-        {arrayPages.map((item, index) => (
-            <Button
-                key={index}
-                onClick={() => setParams({...params, offset: index * params.chunk})}
-                variant={'solid' }
-                colorScheme={'gray'}
-            >
-                {item}
+    <Wrap spacing={2} justify={{ base: 'center', md: 'start' }}>
+        <WrapItem>
+            <Button onClick={handleMinus} variant={'solid'} colorScheme={'gray'}>
+                MENOS
             </Button>
+        </WrapItem>
+        {arrayPages.map((item, index) => (
+          <WrapItem key={index}>
+            <Button
+              onClick={() => setParams({ ...params, offset: index * params.chunk })}
+              variant={'solid'}
+              colorScheme={'gray'}
+            >
+              {item}
+            </Button>
+          </WrapItem>
         ))}
-        <Button
-            onClick={handlePlus}
-            variant={'solid' }
-            colorScheme={'gray'}
-        >
-            MAS
-        </Button>
-    </HStack>
+        <WrapItem>
+            <Button onClick={handlePlus} variant={'solid'} colorScheme={'gray'}>
+                MAS
+            </Button>
+        </WrapItem>
+    </Wrap>
   )
 }
