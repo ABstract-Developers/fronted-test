@@ -30,8 +30,9 @@ export default function Catched() {
       w={"10%"}
       position={"fixed"}
       direction={"column"}
-      right={10}
+      right={5}
       top={10}
+      zIndex={100}
     >
       <Text fontSize={{ base: "lg", md: "2xl" }}>
         {myPokemons.length > 0 && "Capturados: "}
